@@ -1,35 +1,31 @@
 #!/usr/bin/python3
-"""This script defines a route status"""
-from api.v1.views import app_views
+"""
+App views for AirBnB_clone_v3
+"""
+
 from flask import jsonify
 from models import storage
-from models.state import State
-from models.city import City
-from models.user import User
-from models.place import Place
-from models.amenity import Amenity
-from models.review import Review
+from api.v1.views import app_views
 
 
 @app_views.route('/status')
 def status():
-    """Request status"""
-    return jsonify({"status": "OK"})
+    """ returns status """
+    status = {"status": "OK"}
+    return jsonify(status)
 
 
 @app_views.route('/stats')
-def stats():
-    """Count all classes"""
-    dicc = {}
-    list_items = {
-        'states': State,
-        'cities': City,
-        'users': User,
-        'places': Place,
-        'amenities': Amenity,
-        'reviews': Review
-    }
-
-    for key, value in list_items.items():
-        dicc[key] = storage.count(value)
-    return jsonify(dicc)
+def count():
+    """ returns number of each objects by type """
+    total = {}
+    classes = {"Amenity": "amenities",
+               "City": "cities",
+               "Place": "places",
+               "Review": "reviews",
+               "State": "states",
+               "User": "users"}
+    for cls in classes:
+        count = storage.count(cls)
+        total[classes.get(cls)] = count
+    return jsonify(total)
