@@ -1,19 +1,21 @@
 #!/usr/bin/python3
-'''Fabric Module'''
+"""
+    Fabric script that generates tgz archive from contents of web_static
+"""
 from fabric.api import local
-import datetime
-from os import path
+from datetime import datetime
 
 
 def do_pack():
-    '''Create a tarball file of web static'''
-    fecha = datetime.datetime.now().isoformat()
-    fecha = fecha[:-7].replace(":", "").replace(
-        ".", "").replace("T", "").replace("-", "")
-    filename = "versions/web_static_" + fecha + ".tgz"
-    if not path.exists('versions'):
-        if local("mkdir -p versions").failed:
-            return None
-    if local("tar -czvf {} web_static".format(filename)).failed:
+    """
+        generates a .tgz archine from contents of web_static
+    """
+    time = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+    file_name = "versions/web_static_{}.tgz".format(time)
+    try:
+        local("mkdir -p ./versions")
+        local("tar --create --verbose -z --file={} ./web_static"
+              .format(file_name))
+        return file_name
+    except:
         return None
-    return filename
