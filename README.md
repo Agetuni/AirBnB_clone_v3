@@ -1,1 +1,1 @@
-# AirBnB_clone_v3
+This repository has tasks done for project 'AirBnB clone v3'.
